@@ -1,0 +1,218 @@
+
+Object :: struct {
+    value: s64,
+    float_value: f64,
+    name: string,
+}
+Entity :: struct {
+    obj: Object,
+    index: s64,
+    is_object: bool,
+    // Pointer to an Entity
+    ptr: *Entity,        
+}
+
+main :: () -> void {
+    defer {
+        a := 1000001
+        print(a)
+    }
+    defer {
+        s: string = "last line printed"
+        print(s)
+    }
+    fibo: int = fibonacci(10)
+    print(fibo)
+    test_sort()
+    // Indentation doesn't matter
+struct_in_struct()
+    array_test()
+    obj: Object
+    mul_value(2)
+    obj.float_value = 100
+    proc_struct_arg_ptr(&obj)
+    index := 10*3 * (5+3)
+
+    just_type: s64
+
+    a: s64 = 5-2 + index - 4
+    pointer_proc(&a)
+
+    fval: f64 = 1
+    a = a + float_stuff(1, 2.5) * -1
+    a = mul_value(a * 1)
+    // a == 474
+    if a < 2 {
+        print(a)
+    } else if a == 2 {
+        print(a)
+    } else {
+        print(a)
+    }    
+    matrix()
+    
+}
+
+fibonacci :: (n: int) -> int {
+    if n <= 0 {
+        return 0
+    }
+    if n == 1 {
+        return 1
+    }
+    return fibonacci(n-1) + fibonacci(n-2)
+}
+
+empty_proc :: () -> void {}
+
+// No '->' implies return type is void
+empty_proc_implicit :: () {}
+
+// [..]s64 ^= dynamic array of type s64
+count_even_odd :: (a: [..]s64) {
+    even: int
+    odd: int
+    for it, i: a {
+        if *it % 2 == 0 {
+            even = even + 1
+            continue
+        }
+        odd = odd + 1
+    }
+}
+
+// for loops
+selection_sort :: (arr: [..]s64) {
+
+    for it, i: arr {
+        min: int = i
+        for j: i+1..array_len(arr) {
+            if arr[j] < arr[min] {
+                min = j
+            }
+        }
+        if min != i {
+            val: s64 = arr[min]
+            arr[min] = arr[i]
+            arr[i] = val
+        }
+    }
+}
+
+
+struct_in_struct :: () -> void {
+    entity: Entity
+    entity.obj.value = 3
+    entity.obj.float_value = 4.5
+    entity.index = 2
+    entity.is_object = true    
+    // Automatically prints all struct fields thanks to type info generation.
+    // ptr will be null since everything gets default initialized
+    print(entity)
+    entity.obj.name = "a name"
+    entity.ptr = &entity
+    print(entity)
+}
+test_sort :: () -> void {
+    line: string = "~~~~~~~~~~~~~~~test sort~~~~~~~~~~~~~~~~~~~"
+    print(line)
+    arr: [..]s64
+    for i: 0..10 {
+        array_add(arr, 10-i)
+    }
+    selection_sort(arr)
+    for it, _: arr {
+        value := *it
+        print(value)
+    }
+    line = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print(line)
+}
+
+matrix :: () -> void {
+    mat: [..][..]int
+    array_push(mat)
+    array_add(mat[0], 23)
+    array_add(mat[0], 46)
+    val: int = mat[0][1]
+    print(val)
+
+}
+mul_value :: (value: s64) -> s64 {
+    return value * 2
+}
+
+pointer_proc :: (p: *s64) -> bool {
+    *p = *p
+    return true
+}
+
+pointer_pointer_proc :: (p: **s64) -> void {
+    return
+}
+
+float_stuff :: (a: s64, b: f64) -> s64 {
+    some_long_name: f64 = 1.0
+    s: f64 = 2.0
+    // r: f64 = v * s
+    some_var := 2
+    return some_var
+}
+
+// Comment this procedure
+return_struct :: () -> Object {
+    // Comment here too
+    obj: Object
+    return obj
+}
+
+
+proc_struct_arg :: (obj: Object) -> void {    
+    obj.value = 2
+    return
+}
+
+proc_struct_arg_ptr :: (obj: *Object) -> void {
+    obj.value = 2
+    v: Object = *obj
+    print(v)
+    return
+}
+
+array_test :: () -> void {
+    arr: [..] s64
+    array_add(arr, 4)
+    f: s64 = arr[1 - 1]
+    print(f)
+    array_add(arr, 13)
+    pass_array(arr)
+
+    val: s64
+    ptr: *s64 = &val
+}
+
+test_strings :: () -> void {
+    name: string = "a name for my string"
+    print(name)
+}
+pass_array :: (p: [..]s64) -> void {
+    p[0] = 1
+    i := 0
+    while i < 3 {
+        array_add(p, i)
+        i = i + 1
+    }
+
+    for it, index: p {
+        val := p[index] * *it
+        print(val)
+    }
+    return
+}
+defer_early :: () -> void {
+    defer {
+        a := 100001
+        print(a)
+    }
+    return
+}
